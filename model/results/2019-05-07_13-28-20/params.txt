@@ -1,0 +1,4 @@
+/home/zhangyuqi/projects/model/imagenet.py --dataroot /home/zhangyuqi/projects/dataset --seed 42 --gpus 1 -j 8 --scaling 0.5 --input_size 160 -b 16 -lr 0.01 --clr
+Namespace(batch_size=16, clr=True, dataroot='/home/zhangyuqi/projects/dataset', decay=4e-05, epochs=400, epochs_per_step=2, evaluate=False, find_clr=False, gamma=0.1, gpus=[1], input_size=160, learning_rate=0.01, log_interval=100, max_lr=1, min_lr=1e-05, mode='triangular2', momentum=0.9, results_dir='./results', resume='', save='2019-05-07_13-28-20', scaling=0.5, schedule=[200, 300], seed=42, start_epoch=0, type='float32', workers=8)
+Claimed accuracies are: 61.00% top-1, 83.20% top-5
+Best accuracy is 0.00% top-1
