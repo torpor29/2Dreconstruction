@@ -26,7 +26,7 @@ def show_landmarks(image, landMarks):
 
 
 def main():
-	imagepath_txt = '/home/zhangyuqi/projects/model/tmp/2019-05-06_22-49-32/test_label.txt'
+	imagepath_txt = '/home/zhangyuqi/projects/model/tmp/2019-05-08_21-00-05/test_label.txt'
 	imagepath_f = open(imagepath_txt, 'r')
 	count = 0
 	for line in imagepath_f:

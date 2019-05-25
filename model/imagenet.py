@@ -29,9 +29,9 @@ parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
 parser.add_argument('--type', default='float32', help='Type of tensor: float32, float16, float64. Default: float32')
 
 # Optimization options
-parser.add_argument('--epochs', type=int, default=50, help='Number of epochs to train.')
+parser.add_argument('--epochs', type=int, default=400, help='Number of epochs to train.')
 parser.add_argument('-b', '--batch_size', default=64, type=int, metavar='N', help='mini-batch size (default: 64)')
-parser.add_argument('--learning_rate', '-lr', type=float, default=0.01, help='The learning rate.')
+parser.add_argument('--learning_rate', '-lr', type=float, default=0.000001, help='The learning rate.')
 parser.add_argument('--momentum', '-m', type=float, default=0.9, help='Momentum.')
 parser.add_argument('--decay', '-d', type=float, default=4e-5, help='Weight decay (L2 penalty).')
 parser.add_argument('--gamma', type=float, default=0.1, help='LR is multiplied by gamma at scheduled epochs.')
@@ -40,8 +40,8 @@ parser.add_argument('--schedule', type=int, nargs='+', default=[200, 300],
 
 # CLR
 parser.add_argument('--clr', dest='clr', action='store_true', help='Use CLR')
-parser.add_argument('--min_lr', type=float, default=1e-5, help='Minimal LR for CLR.')
-parser.add_argument('--max_lr', type=float, default=0.001, help='Maximal LR for CLR.')
+parser.add_argument('--min_lr', type=float, default=1e-6, help='Minimal LR for CLR.')
+parser.add_argument('--max_lr', type=float, default=1e-5, help='Maximal LR for CLR.')
 parser.add_argument('--epochs_per_step', type=int, default=2,
                     help='Number of epochs per step in CLR, recommended to be between 2 and 10.')
 parser.add_argument('--mode', default='triangular2', help='CLR mode. One of {triangular, triangular2, exp_range}')
