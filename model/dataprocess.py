@@ -11,8 +11,10 @@ import shutil
 # ---------------------------------calculate the mean and std------------------------------------
 def main():
 
-	train_txt_path = '/home/zhangyuqi/clone/facedetect/1_level_1/Data/l1_train_label.txt'
-	img_path_root = '/home/zhangyuqi/clone/facedetect/1_level_1/Data/train/'
+	# train_txt_path = '/home/zhangyuqi/clone/facedetect/1_level_1/Data/l1_train_label.txt'
+	# img_path_root = '/home/zhangyuqi/clone/facedetect/1_level_1/Data/train/'
+	train_txt_path = '/home/zhangyuqi/NewDisk/train_label.txt'
+	img_path_root = '/home/zhangyuqi/NewDisk/train/'
 
 	CNum = 2000
 
@@ -24,7 +26,7 @@ def main():
 		random.shuffle(lines)
 
 		for i in range(CNum):
-			img_path = img_path_root + lines[i].rstrip().split()[0]
+			img_path = lines[i].rstrip().split(' ')[0]
 			img = cv2.imread(img_path)
 			img = cv2.resize(img, (img_h, img_w))
 
@@ -95,4 +97,4 @@ def data_split():
 	df_label.close()
 
 if __name__ == '__main__':
-	data_split()
+	main()

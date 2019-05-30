@@ -46,8 +46,8 @@ def test(save_path, model, loader, criterion, device, dtype):
 	model.eval()
 	test_loss = 0
 	correct1, correct5 = 0, 0
-	path = save_path + '/test_label.txt'
-	f = open(path, 'w')
+	file_path = save_path + '/test_label.txt'
+	f = open(file_path, 'w')
 	for batch_idx, (path, data, target) in enumerate(tqdm(loader)):
 		data, target = data.to(device=device, dtype=dtype), target.to(device=device)
 		with torch.no_grad():
@@ -56,7 +56,7 @@ def test(save_path, model, loader, criterion, device, dtype):
 			outputnp = output.cpu().numpy()
 			for i in range(0, len(path)):
 				newline = path[i]
-				for j in range(0, 10):
+				for j in range(0, 136):
 					newline = newline + ' ' + str(outputnp[i][j])
 				f.write(newline+'\n')
 	f.close()

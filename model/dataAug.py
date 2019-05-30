@@ -52,7 +52,10 @@ class ImgAug:
 		"""
 
 		try:
-			operate = 'lightness_' + str(light)
+			if light == 1.07:
+				operate = 'lightness_1'
+			else:
+				operate = 'lightness_0'
 			# whole path
 			rootPath = self.rootPath
 			savepath = self.get_savename(operate)
@@ -64,7 +67,7 @@ class ImgAug:
 						# rename
 						outpath = savepath + filename.split('.')[0] + '_' + operate + '.' + filename.split('.')[-1]
 						out.save(outpath)
-					shutil.copy(rootPath + '/' + filename.split('.')[0] + '.' + 'pts',savepath)
+					shutil.copy(rootPath + '/' + filename.split('.')[0] + '.' + 'pts',savepath + filename.split('.')[0] + '_' + operate + '.pts')
 		except Exception as e:
 			logger.error('ERROR %s', operate)
 			logger.error(e)
@@ -86,11 +89,21 @@ class ImgAug:
 					height, width = img_raw.shape[:2]
 					center = (width / 2, height / 2)
 					scale = 1
-					rangle = np.deg2rad(angle) # angle in radians
+					if angle == 15:
+						theta_pos = np.random.randint(0, 15)
+						theta_neg = np.random.randint(-15, 0)
+					elif angle == 30:
+						theta_pos = np.random.randint(15, 30)
+						theta_neg = np.random.randint(-30, -15)
+					arr = np.random.randint(0,2)
+					if arr == 0:
+						rangle = np.deg2rad(theta_pos)  # angle in radians
+					else:
+						rangle = np.deg2rad(theta_neg)  # angle in radians
 					# calculate new image width and height
 					nw = (abs(np.sin(rangle) * height) + abs(np.cos(rangle) * width)) * scale
 					nh = (abs(np.cos(rangle) * height) + abs(np.sin(rangle) * width)) * scale
-					rot_mat = cv2.getRotationMatrix2D((nw * 0.5, nh * 0.5), angle, scale)
+					rot_mat = cv2.getRotationMatrix2D((nw * 0.5, nh * 0.5), np.rad2deg(rangle), scale)
 					rot_move = np.dot(rot_mat, np.array([(nw - width) * 0.5, (nh - height) * 0.5, 0]))
 					rot_mat[0, 2] += rot_move[0]
 					rot_mat[1, 2] += rot_move[1]
@@ -99,7 +112,7 @@ class ImgAug:
 					offset_w = (nw - width) / 2
 					offset_h = (nh - height) / 2
 
-					img_rotate = cv2.resize(img_rotate, (height,width))
+					img_rotate = cv2.resize(img_rotate, (width, height))
 					rw = width / nw
 					rh = height / nh
 					outpath = savepath + filename.split('.')[0] + '_' + operate + '.' + filename.split('.')[-1]
@@ -120,9 +133,10 @@ class ImgAug:
 								x_raw = float(line.split()[0])
 								y_raw = float(line.split()[1])
 								(center_x, center_y) = center
+								y_raw = height - y_raw
 								center_y = height - center_y
-								x = (x_raw - center_x) * math.cos(rangle) - (y_raw - center_y) * math.sin(rangle) + center_x
-								y = (x_raw - center_x) * math.sin(rangle) + (y_raw - center_y) * math.cos(rangle) + center_y
+								x = (x_raw - center_x) * np.cos(rangle) - (y_raw - center_y) * np.sin(rangle) + center_x
+								y = (x_raw - center_x) * np.sin(rangle) + (y_raw - center_y) * np.cos(rangle) + center_y
 								x = round((x+offset_w) * rw, 6)
 								y = round((height - y + offset_h) * rh, 6)
 								fa.write(str(x) + ' ' + str(y) + '\n')
@@ -209,18 +223,18 @@ def test():
 	imgPre_afw = ImgAug(rootPath_afw, export_path_afw)
 	imgPre_afw.lightness(1.07)
 	imgPre_afw.lightness(0.87)
-	imgPre_afw.rotate(15)
-	imgPre_afw.rotate(30)
-	imgPre_afw.transpose()
+#	imgPre_afw.rotate(15)
+#	imgPre_afw.rotate(30)
+#	imgPre_afw.transpose()
 
 	rootPath_ibug = '/home/zhangyuqi/NewDisk/ibug'
 	export_path_ibug = '/home/zhangyuqi/NewDisk/ibug_operate'
 	imgPre_ibug = ImgAug(rootPath_ibug, export_path_ibug)
 	imgPre_ibug.lightness(1.07)
 	imgPre_ibug.lightness(0.87)
-	imgPre_ibug.rotate(15)
-	imgPre_ibug.rotate(30)
-	imgPre_ibug.transpose()
+#	imgPre_ibug.rotate(15)
+#	imgPre_ibug.rotate(30)
+#	imgPre_ibug.transpose()
 
 	rootPath_300W_in = '/home/zhangyuqi/NewDisk/300W/01_Indoor'
 	export_path_300W_in = '/home/zhangyuqi/NewDisk/300W_operate/01_Indoor'
@@ -229,16 +243,16 @@ def test():
 	imgPre_300W_in = ImgAug(rootPath_300W_in, export_path_300W_in)
 	imgPre_300W_in.lightness(1.07)
 	imgPre_300W_in.lightness(0.87)
-	imgPre_300W_in.rotate(15)
-	imgPre_300W_in.rotate(30)
-	imgPre_300W_in.transpose()
+#	imgPre_300W_in.rotate(15)
+#	imgPre_300W_in.rotate(30)
+#	imgPre_300W_in.transpose()
 
 	imgPre_300W_out = ImgAug(rootPath_300W_out, export_path_300W_out)
 	imgPre_300W_out.lightness(1.07)
 	imgPre_300W_out.lightness(0.87)
-	imgPre_300W_out.rotate(30)
-	imgPre_300W_out.rotate(15)
-	imgPre_300W_out.transpose()
+#	imgPre_300W_out.rotate(30)
+#	imgPre_300W_out.rotate(15)
+#	imgPre_300W_out.transpose()
 
 	rootPath_helen_test = '/home/zhangyuqi/NewDisk/helen/testset'
 	export_path_helen_test = '/home/zhangyuqi/NewDisk/helen_operate/testset'
@@ -247,16 +261,16 @@ def test():
 	imgPre_helen_test = ImgAug(rootPath_helen_test, export_path_helen_test)
 	imgPre_helen_test.lightness(1.07)
 	imgPre_helen_test.lightness(0.87)
-	imgPre_helen_test.rotate(30)
-	imgPre_helen_test.rotate(15)
-	imgPre_helen_test.transpose()
+#	imgPre_helen_test.rotate(30)
+#	imgPre_helen_test.rotate(15)
+#	imgPre_helen_test.transpose()
 
 	imgPre_helen_train = ImgAug(rootPath_helen_train, export_path_helen_train)
 	imgPre_helen_train.lightness(1.07)
 	imgPre_helen_train.lightness(0.87)
-	imgPre_helen_train.rotate(30)
-	imgPre_helen_train.rotate(15)
-	imgPre_helen_train.transpose()
+#	imgPre_helen_train.rotate(30)
+#	imgPre_helen_train.rotate(15)
+#	imgPre_helen_train.transpose()
 
 	rootPath_ifpw_test = '/home/zhangyuqi/NewDisk/ifpw/testset'
 	export_path_ifpw_test = '/home/zhangyuqi/NewDisk/ifpw_operate/testset'
@@ -265,16 +279,16 @@ def test():
 	imgPre_ifpw_test = ImgAug(rootPath_ifpw_test, export_path_ifpw_test)
 	imgPre_ifpw_test.lightness(1.07)
 	imgPre_ifpw_test.lightness(0.87)
-	imgPre_ifpw_test.rotate(30)
-	imgPre_ifpw_test.rotate(15)
-	imgPre_ifpw_test.transpose()
+#	imgPre_ifpw_test.rotate(30)
+#	imgPre_ifpw_test.rotate(15)
+#	imgPre_ifpw_test.transpose()
 
 	imgPre_ifpw_train = ImgAug(rootPath_ifpw_train, export_path_ifpw_train)
 	imgPre_ifpw_train.lightness(1.07)
 	imgPre_ifpw_train.lightness(0.87)
-	imgPre_ifpw_train.rotate(30)
-	imgPre_ifpw_train.rotate(15)
-	imgPre_ifpw_train.transpose()
+#	imgPre_ifpw_train.rotate(30)
+#	imgPre_ifpw_train.rotate(15)
+#	imgPre_ifpw_train.transpose()
 
 
 if __name__ == '__main__':

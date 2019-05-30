@@ -95,10 +95,11 @@ class MobileNetV2(nn.Module):
 		self.activation_type=activation
 		self.activation=activation(inplace=True)
 		self.num_classes=num_classes
-		self.num_of_channels=[16, 24, 32, 64, 256, 10]
-		self.c=self.num_of_channels
-		self.n=[1,2,2,2]
-		self.s=[2,2,2,2]
+		#self.num_of_channels=[16, 24, 32, 64, 256, 136]
+		self.num_of_channels = [96, 256, 512, 512, 2048, 136]
+		self.c = self.num_of_channels
+		self.n = [1, 2, 2, 2]
+		self.s = [2, 2, 2, 2]
 
 		self.conv1=nn.Conv2d(in_channels,self.c[0] , kernel_size=3, bias=False, stride=self.s[0], padding=1)
 		self.bn1=nn.BatchNorm2d(self.c[0])

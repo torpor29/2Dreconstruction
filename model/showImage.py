@@ -1,3 +1,4 @@
+# show images and landmarks, possible problem1: resize image of lmofafw.py
 import os
 import matplotlib
 from matplotlib import pyplot as plt
@@ -26,7 +27,8 @@ def show_landmarks(image, landMarks):
 
 
 def main():
-	imagepath_txt = '/home/zhangyuqi/projects/model/tmp/2019-05-08_21-00-05/test_label.txt'
+	#imagepath_txt = '/home/zhangyuqi/projects/model/results/2019-05-28_22-17-51/test_label.txt'
+	imagepath_txt = '/home/zhangyuqi/NewDisk/valid_label.txt'
 	imagepath_f = open(imagepath_txt, 'r')
 	count = 0
 	for line in imagepath_f:
@@ -37,7 +39,7 @@ def main():
 		img = cv2.imread(image_path)
 		landmark=[]
 		for i in range(1, len(line.split())):
-			landmark.append(float(line.split()[i]) * 80 + 80)
+			landmark.append(float(line.split()[i]) * 1 + 0)
 		show_landmarks(img, landmark)
 		count += 1
 

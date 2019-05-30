@@ -9,9 +9,10 @@ class MyDataset(Dataset):
 		imgs = []
 		for line in fh:
 			line = line.rstrip()
-			words = line.split()
+			words = line.split(' ')
 			# imgs.append(words[0])
 			la = []
+			print(words[0])
 			for i in range(1, len(words)):
 				la.append((float(words[i]) - 80) / 80)
 			imgs.append((words[0], la))
