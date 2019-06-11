@@ -42,12 +42,12 @@ def get_transform(augment = True, input_size = 160):
 	# resize the image, then labels should be changed relatively
 
 def get_loaders(dataroot, val_batch_size, train_batch_size, input_size, workers):
-	val_data = MyDataset(txt_path=os.path.join(dataroot,'valid_label.txt'),
+	val_data = MyDataset(txt_path=os.path.join(dataroot,'valid_label1.txt'),
 									transform=get_transform(False, input_size))
 	val_loader = torch.utils.data.DataLoader(val_data, batch_size=val_batch_size, shuffle=False,
 											 num_workers=workers, pin_memory=True)
 
-	train_data = MyDataset(txt_path=os.path.join(dataroot, 'train_label.txt'),
+	train_data = MyDataset(txt_path=os.path.join(dataroot, 'train_label1.txt'),
 									  transform=get_transform(input_size = input_size))
 	train_loader = torch.utils.data.DataLoader(train_data, batch_size=train_batch_size, shuffle=True,
 											   num_workers=workers, pin_memory=True)

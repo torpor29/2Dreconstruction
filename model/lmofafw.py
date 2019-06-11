@@ -4,6 +4,8 @@ import math
 import os
 import random
 import cv2
+from showImage import show_landmarks
+from cropImg import crop_img
 # rewrite the landmark to label.txt file (for original images)
 afw_path = '/home/zhangyuqi/NewDisk/afw'
 helen_test_path = '/home/zhangyuqi/NewDisk/helen/testset'
@@ -77,9 +79,9 @@ train_path = '/home/zhangyuqi/NewDisk/train'
 test_path = '/home/zhangyuqi/NewDisk/test'
 valid_path = '/home/zhangyuqi/NewDisk/valid'
 
-train_label = '/home/zhangyuqi/NewDisk/train_label.txt'
-test_label = '/home/zhangyuqi/NewDisk/test_label.txt'
-valid_label = '/home/zhangyuqi/NewDisk/valid_label.txt'
+train_label = '/home/zhangyuqi/NewDisk/train_label1.txt'
+test_label = '/home/zhangyuqi/NewDisk/test_label1.txt'
+valid_label = '/home/zhangyuqi/NewDisk/valid_label1.txt'
 # ---------------------------------------------------------------------------------------
 
 # -----------------------------------for original images------------------------------------
@@ -141,10 +143,11 @@ def write_label_prep():
 					img_aim_path = train_path + '/' +filename
 					label_aim_path = train_label
 				img = cv2.imread(img_path)
-				height, width = img.shape[:2]
-				img_resize = cv2.resize(img, (img_w, img_h))
-				cv2.imwrite(img_aim_path, img_resize)
+				#height, width = img.shape[:2]
+				#img_resize = cv2.resize(img, (img_w, img_h))
+				#cv2.imwrite(img_aim_path, img_resize)
 				num_of_line = 1
+				landmark = []
 				with open(label_path, 'r') as f:
 					while True:
 						line = f.readline()
@@ -153,17 +156,35 @@ def write_label_prep():
 						if num_of_line == 1:
 							write_txt(label_aim_path, img_aim_path)
 						elif num_of_line > 3 and num_of_line < 72:
-							write_txt(label_aim_path, ' ')
-							x = float(line.split()[0])
-							y = float(line.split()[1])
-							x = round(x * img_w / width)
-							y = round(y * img_h / height)
-							new_line = str(x) + ' ' + str(y)
-							write_txt(label_aim_path, new_line)
+							#write_txt(label_aim_path, ' ')
+							#x = float(line.split()[0])
+							landmark.append(line.split()[0])
+							#y = float(line.split()[1])
+							landmark.append(line.split()[1])
+							#x = round(x * img_w / width)
+							#y = round(y * img_h / height)
+							#new_line = str(x) + ' ' + str(y)
+							#write_txt(label_aim_path, new_line)
 						elif num_of_line >= 72:
-							write_txt(label_aim_path, '\n')
+							#write_txt(label_aim_path, '\n')
 							break
 						num_of_line += 1
+				cropimg, lk = crop_img(img, landmark)
+				height, width = cropimg.shape[:2]
+				cropimg_resize = cv2.resize(cropimg, (img_w, img_h))
+				cv2.imwrite(img_aim_path, cropimg_resize)
+				ldtxt = ''
+				for i in range(68):
+					x = round(lk[i*2] * img_w / width)
+					lk[i*2] = round(lk[i*2] * img_w / width)
+					y = round(lk[i*2+1] * img_h / height)
+					lk[i * 2 + 1] = round(lk[i*2+1] * img_h / height)
+					ldtxt = ldtxt + ' ' + str(x) + ' ' + str(y)
+				ldtxt = ldtxt + '\n'
+				write_txt(label_aim_path, ldtxt)
+
+
+
 
 
 if __name__ == '__main__':
@@ -177,4 +198,5 @@ if __name__ == '__main__':
 	# ----------------------------for preprocessed images---------------------------------
 
 	write_label_prep()
+
 

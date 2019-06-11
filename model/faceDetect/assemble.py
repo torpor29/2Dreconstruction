@@ -23,11 +23,11 @@ def assemble_data(output_file, anno_file_list = []):
 		with open(anno_file, 'r') as f:
 			anno_lines = f.readlines()
 
-		base_num = 250000 #set the threshold of choosing annotations randomly
+		base_num = 5000 #set the threshold of choosing annotations randomly
 
 		if len(anno_lines) > base_num * 3:
 			idx_keep = npr.choice(len(anno_lines), size=base_num * 3, replace=True)
-		elif len(anno_lines) < 100000:
+		elif len(anno_lines) < 5000:
 			idx_keep = npr.choice(len(anno_lines), size= len(anno_lines), replace=True)
 		else:
 			idx_keep = np.arange(len(anno_lines))

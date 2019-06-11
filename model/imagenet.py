@@ -18,6 +18,7 @@ from cycliclr import CyclicLR
 from data import get_loaders
 from logger import CsvLogger
 from mobilenetv2 import MobileNetV2
+from miniVGG import miniVGG
 from run import train, test, save_checkpoint, find_bounds_clr
 
 parser = argparse.ArgumentParser(description='MobileNetV2 training with PyTorch')
@@ -31,7 +32,7 @@ parser.add_argument('--type', default='float32', help='Type of tensor: float32, 
 # Optimization options
 parser.add_argument('--epochs', type=int, default=100, help='Number of epochs to train.')
 parser.add_argument('-b', '--batch_size', default=64, type=int, metavar='N', help='mini-batch size (default: 64)')
-parser.add_argument('--learning_rate', '-lr', type=float, default=0.0001, help='The learning rate.')
+parser.add_argument('--learning_rate', '-lr', type=float, default=0.001, help='The learning rate.')
 parser.add_argument('--momentum', '-m', type=float, default=0.9, help='Momentum.')
 parser.add_argument('--decay', '-d', type=float, default=4e-5, help='Weight decay (L2 penalty).')
 parser.add_argument('--gamma', type=float, default=0.1, help='LR is multiplied by gamma at scheduled epochs.')
@@ -92,7 +93,7 @@ def main():
     if args.evaluate:
         args.results_dir = './tmp'
     if args.save is '':
-        args.save = time_stamp
+        args.save = time_stamp + 'miniVGG'
     save_path = os.path.join(args.results_dir, args.save)
     if not os.path.exists(save_path):
         os.makedirs(save_path)
@@ -113,12 +114,13 @@ def main():
     else:
         raise ValueError('Wrong type!')  # TODO int8
 
-    model = MobileNetV2(input_size=160, scale=args.scaling)
+    #model = MobileNetV2(input_size=160, scale=args.scaling)
+    model = miniVGG()
     num_parameters = sum([l.nelement() for l in model.parameters()])
     print(model)
     print('number of parameters: {}'.format(num_parameters))
     print('FLOPs: {}'.format(
-        flops_benchmark.count_flops(MobileNetV2,
+        flops_benchmark.count_flops(miniVGG,
                                     args.batch_size // len(args.gpus) if args.gpus is not None else args.batch_size,
                                     device, dtype, 160, 3, args.scaling)))
 
